@@ -9,8 +9,8 @@ import datetime
 proj_name = 'Ridehome AWS'
 file_name = 'index.html'
 
-aws_key = os.environ['AWS_ACCESS_KEY']
-aws_secret = os.environ['AWS_SECRET_KEY']
+aws_key = os.environ['AWS_ACC_KEY']
+aws_secret = os.environ['AWS_SEC_KEY']
 
 def generate_index(file_name):
 
