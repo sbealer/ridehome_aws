@@ -80,11 +80,12 @@ def ship_to_s3(file_name):
 
 #######################################################################################################################
 
-def run():
+def run(event, context):
 
     generate_index(file_name)
     ship_to_s3(file_name)
 
+    return 'Success'
 
 if __name__ == '__main__':
 
