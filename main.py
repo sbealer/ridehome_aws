@@ -80,9 +80,14 @@ def ship_to_s3(file_name):
 
 #######################################################################################################################
 
-if __name__ == '__main__':
+def run():
 
     generate_index(file_name)
     ship_to_s3(file_name)
+
+
+if __name__ == '__main__':
+
+    run()
 
 
