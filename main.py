@@ -3,8 +3,9 @@ import re
 import time
 from bs4 import BeautifulSoup
 import boto3
-import os
+import ntpath
 import datetime
+import os
 
 proj_name = 'Ridehome AWS'
 file_name = '/tmp/index.html'
@@ -69,7 +70,7 @@ def generate_index(file_name):
 def ship_to_s3(file_name):
     bucket_name = "web-host-example"
     local_file_name = file_name
-    remote_file_name = file_name
+    remote_file_name = ntpath.basename(file_name)
 
     session = boto3.Session(
         aws_access_key_id=aws_key,
