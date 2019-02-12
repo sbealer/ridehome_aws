@@ -7,13 +7,17 @@ import os
 import datetime
 
 proj_name = 'Ridehome AWS'
-file_name = 'index.html'
+file_name = '/tmp/index.html'
 
 aws_key = os.environ['AWS_ACC_KEY']
 aws_secret = os.environ['AWS_SEC_KEY']
 
-def generate_index(file_name):
+if not os.path.exists('/tmp'):
+    os.makedirs('/tmp')
 
+#######################################################################################################################
+
+def generate_index(file_name):
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     print("Parsing website")
@@ -21,13 +25,13 @@ def generate_index(file_name):
     print("Website parsed")
 
     print("Writing data to index")
-    with open(file_name,'w',encoding='utf-8') as html_file:
+    with open(file_name, 'w', encoding='utf-8') as html_file:
 
         html_file.write(f"""<html>
         <head><meta charset="utf-8"></head>
         <body>
         <div style="width:100%; text-align:right">Last updated: {timestamp}</div>
-        
+
         """)
 
         for post in rhfeed.entries:
@@ -59,10 +63,10 @@ def generate_index(file_name):
                     html_file.write("No show links for this episode ¯\_(ツ)_/¯\n")
     print("Index written.")
 
+
 #######################################################################################################################
 
 def ship_to_s3(file_name):
-
     bucket_name = "web-host-example"
     local_file_name = file_name
     remote_file_name = file_name
@@ -72,23 +76,24 @@ def ship_to_s3(file_name):
         aws_secret_access_key=aws_secret,
     )
 
-    s3 = session.client('s3',)
+    s3 = session.client('s3', )
 
     print("Sending file to S3")
-    s3.upload_file(local_file_name, bucket_name, remote_file_name,  ExtraArgs={'ContentType': "text/html", 'ACL': "public-read"})
+    s3.upload_file(local_file_name, bucket_name, remote_file_name,
+                   ExtraArgs={'ContentType': "text/html", 'ACL': "public-read"})
     print("File sent.")
+
 
 #######################################################################################################################
 
-def run(event, context):
-
+def run():
     generate_index(file_name)
     ship_to_s3(file_name)
 
     return 'Success'
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     run()
 
 
